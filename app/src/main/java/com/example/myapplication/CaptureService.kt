@@ -5,17 +5,9 @@ import android.app.NotificationManager
 import android.app.Service
 import android.content.Context
 import android.content.Intent
-import android.graphics.PixelFormat
-import android.hardware.display.DisplayManager
-import android.media.ImageReader
-import android.media.projection.MediaProjectionManager
 import android.os.Build
-import android.os.Handler
-import android.os.HandlerThread
 import android.os.IBinder
-import android.util.DisplayMetrics
 import android.util.Log
-import android.view.WindowManager
 import androidx.core.app.NotificationCompat
 
 class CaptureService : Service() {
@@ -50,7 +42,8 @@ class CaptureService : Service() {
         }
         val data = intent?.getParcelableExtra<Intent>("data")!!
         val code = intent.getIntExtra("code", 0)
-        captureManager.startCapture(code, data)
+        captureManager.initialize(code, data)
+        captureManager.startCapture()
         return START_STICKY
     }
 }

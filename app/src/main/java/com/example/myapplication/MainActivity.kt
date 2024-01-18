@@ -62,7 +62,6 @@ fun ScreenCaptureUI(onFinish: () -> Unit) {
                 intent.putExtra("code", result.resultCode)
                 intent.putExtra("data", result.data)
                 context.startForegroundService(intent)
-                onFinish()
             }
         }
     )
