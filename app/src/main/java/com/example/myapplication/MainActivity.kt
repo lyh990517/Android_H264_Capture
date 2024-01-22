@@ -89,8 +89,6 @@ fun ScreenCaptureUI(onFinish: () -> Unit) {
             }
         }
     }
-
-
 }
 
 @Composable
