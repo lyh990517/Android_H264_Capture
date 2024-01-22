@@ -5,10 +5,12 @@ import android.media.MediaCodecInfo
 import android.media.MediaFormat
 import android.media.MediaMuxer
 import android.os.Environment
+import android.util.Log
 import android.view.Surface
 import java.io.File
 
 class H264Encoder(
+    private val filePath: String,
     private val width: Int,
     private val height: Int,
     private val bindSurface: ((Surface) -> Unit)? = null,
@@ -61,8 +63,9 @@ class H264Encoder(
         super.run()
         mediaCodec.start()
         val info: MediaCodec.BufferInfo = MediaCodec.BufferInfo()
-        val file = File(Environment.getExternalStorageDirectory().absolutePath + "/test123.mp4")
-        if(!file.exists()) file.createNewFile()
+        val file = File(filePath)
+        file.parentFile?.apply { if (!exists()) mkdir() }
+        if (!file.exists()) file.createNewFile()
         mediaMuxer = MediaMuxer(file.path, MediaMuxer.OutputFormat.MUXER_OUTPUT_MPEG_4)
         try {
             while (!isStop) {

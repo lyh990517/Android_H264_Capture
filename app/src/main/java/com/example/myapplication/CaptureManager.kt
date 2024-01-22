@@ -6,14 +6,12 @@ import android.content.Intent
 import android.hardware.display.DisplayManager
 import android.media.projection.MediaProjection
 import android.media.projection.MediaProjectionManager
-import android.os.Build
 import android.view.WindowManager
-import androidx.annotation.RequiresApi
 
 object CaptureManager {
     private lateinit var mediaProjection: MediaProjection
     private var h264Encoder: H264Encoder? = null
-    fun initialize(code: Int, data: Intent, context: Context) {
+    fun initialize(filePath: String, code: Int, data: Intent, context: Context) {
         val mediaProjectionManager: MediaProjectionManager =
             (context.getSystemService(Service.MEDIA_PROJECTION_SERVICE) as MediaProjectionManager)
         val window by lazy { context.getSystemService(Context.WINDOW_SERVICE) as WindowManager }
@@ -21,6 +19,7 @@ object CaptureManager {
         mediaProjectionManager.apply {
             mediaProjection = getMediaProjection(code, data)
             h264Encoder = H264Encoder(
+                filePath = filePath,
                 width = window.currentWindowMetrics.bounds.width(),
                 height = window.currentWindowMetrics.bounds.height(),
                 bindSurface = { surface ->

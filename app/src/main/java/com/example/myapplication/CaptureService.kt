@@ -38,7 +38,8 @@ class CaptureService : Service() {
         }
         val data = intent?.getParcelableExtra<Intent>("data")!!
         val code = intent.getIntExtra("code", 0)
-        CaptureManager.initialize(code, data, this)
+        val filePath = intent.getStringExtra("filePath") ?: ""
+        CaptureManager.initialize(filePath, code, data, this)
         CaptureManager.startCapture()
         return START_STICKY
     }
