@@ -10,8 +10,6 @@ import android.media.projection.MediaProjectionManager
 class CaptureManager(private val context: Context) {
     private val mediaProjectionManager: MediaProjectionManager =
         (context.getSystemService(Service.MEDIA_PROJECTION_SERVICE) as MediaProjectionManager)
-    private lateinit var mediaProjection: MediaProjection
-    private var h264Encoder: H264EncodeThread? = null
 
     fun initialize(code: Int, data: Intent) {
         val display = context.resources.displayMetrics
@@ -33,13 +31,17 @@ class CaptureManager(private val context: Context) {
             )
         }
     }
+    companion object{
+        private lateinit var mediaProjection: MediaProjection
+        private var h264Encoder: H264EncodeThread? = null
+        fun startCapture() {
+            h264Encoder?.startEncode()
+        }
 
-    fun startCapture() {
-        h264Encoder?.startEncode()
-    }
-
-    fun stopCapture() {
-
+        fun stopCapture() {
+            h264Encoder?.stopEncode()
+            mediaProjection.stop()
+        }
     }
 
 }
