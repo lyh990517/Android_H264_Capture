@@ -13,7 +13,9 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
@@ -66,12 +68,21 @@ fun ScreenCaptureUI(onFinish: () -> Unit) {
         }
     )
     Scaffold {
-        Box(Modifier.fillMaxSize()) {
-            Button(modifier = Modifier.align(Alignment.Center), onClick = {
+        Column(
+            Modifier.fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            Button(onClick = {
                 val mediaProjectionManager =
                     context.getSystemService(Context.MEDIA_PROJECTION_SERVICE) as MediaProjectionManager
                 val captureIntent = mediaProjectionManager.createScreenCaptureIntent()
                 launcher.launch(captureIntent)
+            }) {
+                Text("Start Capture")
+            }
+            Button(onClick = {
+                CaptureManager.stopCapture()
             }) {
                 Text("Start Capture")
             }
