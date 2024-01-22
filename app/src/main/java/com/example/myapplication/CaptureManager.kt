@@ -10,12 +10,13 @@ import android.os.Build
 import android.view.WindowManager
 import androidx.annotation.RequiresApi
 
-class CaptureManager(private val context: Context) {
-    private val mediaProjectionManager: MediaProjectionManager =
-        (context.getSystemService(Service.MEDIA_PROJECTION_SERVICE) as MediaProjectionManager)
-    private val window by lazy { context.getSystemService(Context.WINDOW_SERVICE) as WindowManager }
-    @RequiresApi(Build.VERSION_CODES.R)
-    fun initialize(code: Int, data: Intent) {
+object CaptureManager {
+    private lateinit var mediaProjection: MediaProjection
+    private var h264Encoder: H264Encoder? = null
+    fun initialize(code: Int, data: Intent, context: Context) {
+        val mediaProjectionManager: MediaProjectionManager =
+            (context.getSystemService(Service.MEDIA_PROJECTION_SERVICE) as MediaProjectionManager)
+        val window by lazy { context.getSystemService(Context.WINDOW_SERVICE) as WindowManager }
         val display = context.resources.displayMetrics
         mediaProjectionManager.apply {
             mediaProjection = getMediaProjection(code, data)
@@ -37,17 +38,14 @@ class CaptureManager(private val context: Context) {
             )
         }
     }
-    companion object{
-        private lateinit var mediaProjection: MediaProjection
-        private var h264Encoder: H264Encoder? = null
-        fun startCapture() {
-            h264Encoder?.startEncode()
-        }
 
-        fun stopCapture() {
-            h264Encoder?.stopEncode()
-            mediaProjection.stop()
-        }
+    fun startCapture() {
+        h264Encoder?.startEncode()
     }
 
+    fun stopCapture() {
+        h264Encoder?.stopEncode()
+        mediaProjection.stop()
+    }
 }
+

@@ -11,11 +11,7 @@ import android.util.Log
 import androidx.core.app.NotificationCompat
 
 class CaptureService : Service() {
-
-    private val captureManager by lazy { CaptureManager(this) }
-
     override fun onBind(intent: Intent?): IBinder? = null
-
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         Log.e("CaptureService", "onStartCommand")
@@ -42,7 +38,7 @@ class CaptureService : Service() {
         }
         val data = intent?.getParcelableExtra<Intent>("data")!!
         val code = intent.getIntExtra("code", 0)
-        captureManager.initialize(code, data)
+        CaptureManager.initialize(code, data, this)
         CaptureManager.startCapture()
         return START_STICKY
     }
