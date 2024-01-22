@@ -15,7 +15,7 @@ class H264Encoder(
     private val height: Int,
     private val bindSurface: ((Surface) -> Unit)? = null,
     private val colorFormat: Int = MediaCodecInfo.CodecCapabilities.COLOR_FormatSurface,
-) : Thread(("encode-h264")) {
+) : Thread(("H264-Encoding-Thread")) {
     private val mediaCodec: MediaCodec =
         MediaCodec.createEncoderByType(MediaFormat.MIMETYPE_VIDEO_AVC)
     private lateinit var mediaMuxer: MediaMuxer
