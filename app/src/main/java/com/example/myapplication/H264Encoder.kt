@@ -78,9 +78,9 @@ class H264EncodeThread(
 
                 var outIndex = mediaCodec.dequeueOutputBuffer(info, 100_000)
                 while (outIndex >= 0) {
-                    val outtBuffer = mediaCodec.getOutputBuffer(outIndex)
+                    val outputBuffer = mediaCodec.getOutputBuffer(outIndex)
                     val data = ByteArray(info.size)
-                    outtBuffer?.get(data)
+                    outputBuffer?.get(data)
                     Log.e("data","${data.size}")
 
                     mediaCodec.releaseOutputBuffer(
