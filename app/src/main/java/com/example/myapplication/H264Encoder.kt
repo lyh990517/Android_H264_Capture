@@ -7,8 +7,8 @@ import android.util.Log
 import android.view.Surface
 
 class H264Encoder(
-    private val width: Int = 720,
-    private val height: Int = 1080,
+    private val width: Int,
+    private val height: Int,
     private val bindSurface: ((Surface) -> Unit)? = null,
     private val colorFormat: Int = MediaCodecInfo.CodecCapabilities.COLOR_FormatSurface,
 ) : Thread(("encode-h264")) {
@@ -24,7 +24,8 @@ class H264Encoder(
             MediaFormat.createVideoFormat(
                 MediaFormat.MIMETYPE_VIDEO_AVC,
                 width,
-                height)
+                height
+            )
         mediaFormat.setInteger(MediaFormat.KEY_FRAME_RATE, 20)
         mediaFormat.setInteger(MediaFormat.KEY_I_FRAME_INTERVAL, 30)
         mediaFormat.setInteger(MediaFormat.KEY_BIT_RATE, width * height)
@@ -61,7 +62,7 @@ class H264Encoder(
                     val outputBuffer = mediaCodec.getOutputBuffer(outIndex)
                     val data = ByteArray(info.size)
                     outputBuffer?.get(data)
-                    Log.e("data","${data.size}")
+                    Log.e("data", "${data.size}")
 
                     mediaCodec.releaseOutputBuffer(
                         outIndex,
