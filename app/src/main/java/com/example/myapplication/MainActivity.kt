@@ -64,6 +64,7 @@ fun ScreenCaptureUI(onFinish: () -> Unit) {
                 intent.putExtra("code", result.resultCode)
                 intent.putExtra("data", result.data)
                 context.startForegroundService(intent)
+                onFinish()
             }
         }
     )
@@ -84,7 +85,7 @@ fun ScreenCaptureUI(onFinish: () -> Unit) {
             Button(onClick = {
                 CaptureManager.stopCapture()
             }) {
-                Text("Start Capture")
+                Text("Stop Capture")
             }
         }
     }
