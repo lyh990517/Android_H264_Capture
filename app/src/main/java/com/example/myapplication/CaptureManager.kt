@@ -15,7 +15,7 @@ class CaptureManager(private val context: Context) {
         val display = context.resources.displayMetrics
         mediaProjectionManager.apply {
             mediaProjection = getMediaProjection(code, data)
-            h264Encoder = H264EncodeThread(
+            h264Encoder = H264Encoder(
                 bindSurface = { surface ->
                     mediaProjection.createVirtualDisplay(
                         "screen-h264",
@@ -33,7 +33,7 @@ class CaptureManager(private val context: Context) {
     }
     companion object{
         private lateinit var mediaProjection: MediaProjection
-        private var h264Encoder: H264EncodeThread? = null
+        private var h264Encoder: H264Encoder? = null
         fun startCapture() {
             h264Encoder?.startEncode()
         }

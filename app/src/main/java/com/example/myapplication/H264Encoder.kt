@@ -7,7 +7,7 @@ import android.util.Log
 import android.view.Surface
 import java.nio.ByteBuffer
 
-class H264EncodeThread(
+class H264Encoder(
     private val WIDTH: Int = 720,
     private val HEIGHT: Int = 1080,
     var encode: (() -> ByteArray)? = null,
