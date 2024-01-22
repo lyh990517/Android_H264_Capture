@@ -24,7 +24,7 @@ class H264Encoder(
     private fun initMediaCodec() {
         val mediaFormat =
             MediaFormat.createVideoFormat(
-                MediaFormat.MIMETYPE_VIDEO_AVC,//和编码type一致
+                MediaFormat.MIMETYPE_VIDEO_AVC,
                 WIDTH,
                 HEIGHT)
         mediaFormat.setInteger(MediaFormat.KEY_FRAME_RATE, 20)
