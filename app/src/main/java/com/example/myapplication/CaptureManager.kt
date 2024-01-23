@@ -6,6 +6,7 @@ import android.content.Intent
 import android.hardware.display.DisplayManager
 import android.media.projection.MediaProjection
 import android.media.projection.MediaProjectionManager
+import android.os.Build
 import android.view.WindowManager
 
 object CaptureManager {
@@ -20,8 +21,8 @@ object CaptureManager {
             mediaProjection = getMediaProjection(code, data)
             h264Encoder = H264Encoder(
                 filePath = filePath,
-                width = window.currentWindowMetrics.bounds.width(),
-                height = window.currentWindowMetrics.bounds.height(),
+                width = if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) window.currentWindowMetrics.bounds.width() else window.defaultDisplay.width,
+                height = if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) window.currentWindowMetrics.bounds.height() else window.defaultDisplay.height,
                 bindSurface = { surface ->
                     mediaProjection.createVirtualDisplay(
                         "screen-h264",
