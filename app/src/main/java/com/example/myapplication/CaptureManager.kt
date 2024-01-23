@@ -19,6 +19,9 @@ object CaptureManager {
         val display = context.resources.displayMetrics
         mediaProjectionManager.apply {
             mediaProjection = getMediaProjection(code, data)
+            mediaProjection.registerCallback(object : MediaProjection.Callback() {
+
+            }, null)
             h264Encoder = H264Encoder(
                 filePath = filePath,
                 width = if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) window.currentWindowMetrics.bounds.width() else window.defaultDisplay.width,
