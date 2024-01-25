@@ -95,11 +95,7 @@ class H264Encoder(
 
             }
         } catch (e: Exception) {
-
             e.printStackTrace()
-            onException?.apply {
-                invoke(e.message ?: "")
-            }
         } finally {
             if (muxerStarted) {
                 mediaMuxer.stop()
@@ -116,11 +112,8 @@ class H264Encoder(
         isStop = false
         start()
     }
-
     fun stopEncode() {
         isStop = true
     }
-
-    var onException: ((String) -> Unit)? = null
 
 }
