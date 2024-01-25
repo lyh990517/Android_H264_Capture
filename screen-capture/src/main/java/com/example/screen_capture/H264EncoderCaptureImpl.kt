@@ -1,4 +1,4 @@
-package com.example.myapplication
+package com.example.screen_capture
 
 import android.app.Service
 import android.content.Context
@@ -10,10 +10,10 @@ import android.os.Build
 import android.util.Log
 import android.view.WindowManager
 
-object CaptureManager {
+internal class H264EncoderCaptureImpl : H264EncoderCapture{
     private lateinit var mediaProjection: MediaProjection
     private var h264Encoder: H264Encoder? = null
-    fun startCapture(filePath: String, code: Int, data: Intent, context: Context) {
+    override fun startCapture(filePath: String, code: Int, data: Intent, context: Context) {
         val mediaProjectionManager: MediaProjectionManager =
             (context.getSystemService(Service.MEDIA_PROJECTION_SERVICE) as MediaProjectionManager)
         val window by lazy { context.getSystemService(Context.WINDOW_SERVICE) as WindowManager }
@@ -47,7 +47,7 @@ object CaptureManager {
         h264Encoder?.startEncode()
     }
 
-    fun stopCapture() {
+    override fun stopCapture() {
         h264Encoder?.stopEncode()
         mediaProjection.stop()
     }
