@@ -75,7 +75,7 @@ class MainActivity : ComponentActivity() {
                     }) {
                         ScreenCaptureUI {
                             finish()
-                            Toast.makeText(this, "화면 캡처가 시작됩니다.", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(this, "Start Capture.", Toast.LENGTH_SHORT).show()
                         }
                     }
                 }
@@ -95,13 +95,13 @@ fun ScreenCaptureUI(onFinish: () -> Unit) {
         contract = ActivityResultContracts.StartActivityForResult(),
         onResult = { result ->
             if (result.resultCode != RESULT_OK)
-                Toast.makeText(context, "권한을 허용해야 캡처가 가능합니다.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Please Enable Permission!", Toast.LENGTH_SHORT).show()
         })
     val writeExternalStorageLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestPermission(),
         onResult = { isGranted ->
             if (!isGranted)
-                Toast.makeText(context, "권한을 허용해야 캡처가 가능합니다.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Please Enable Permission!", Toast.LENGTH_SHORT).show()
         })
     val mediaProjectionLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.StartActivityForResult(),
