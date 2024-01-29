@@ -26,8 +26,8 @@ internal class H264EncoderCaptureImpl : H264EncoderCapture{
                     Log.e("MediaProjection","Stop Capture!")
                 }
             }, null)
+            FileManager.prepareFile(filePath)
             h264Encoder = H264Encoder(
-                filePath = filePath,
                 width = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) window.currentWindowMetrics.bounds.width() else window.defaultDisplay.width,
                 height = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) window.currentWindowMetrics.bounds.height() else window.defaultDisplay.height,
                 bindSurface = { surface ->

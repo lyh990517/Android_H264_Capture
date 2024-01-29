@@ -5,19 +5,16 @@ import android.media.MediaCodecInfo
 import android.media.MediaFormat
 import android.media.MediaMuxer
 import android.view.Surface
+import com.example.screen_capture.FileManager.filePath
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.NonCancellable.isActive
 import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.cancel
 import kotlinx.coroutines.cancelChildren
 import kotlinx.coroutines.job
 import kotlinx.coroutines.launch
-import java.io.File
 import java.nio.ByteBuffer
 
 internal class H264Encoder(
-    private val filePath: String,
     private val width: Int,
     private val height: Int,
     private val bindSurface: ((Surface) -> Unit)? = null,
@@ -52,7 +49,7 @@ internal class H264Encoder(
     private fun runEncodingProcess() {
         mediaCodec.start()
         val info = MediaCodec.BufferInfo()
-        prepareFile(filePath).let { mediaMuxer = MediaMuxer(it, MediaMuxer.OutputFormat.MUXER_OUTPUT_MPEG_4) }
+        mediaMuxer = MediaMuxer(filePath, MediaMuxer.OutputFormat.MUXER_OUTPUT_MPEG_4)
 
         try {
             while (!isStop && h264Scope.coroutineContext.job.isActive) {
@@ -75,13 +72,6 @@ internal class H264Encoder(
             }
             outIndex = mediaCodec.dequeueOutputBuffer(info, 100_000)
         }
-    }
-
-    private fun prepareFile(filePath: String): String {
-        return File(filePath).apply {
-            parentFile?.takeIf { !it.exists() }?.mkdirs()
-            if (!exists()) createNewFile()
-        }.path
     }
 
     private fun startMuxerIfNeeded(info: MediaCodec.BufferInfo) {
