@@ -111,14 +111,14 @@ internal class H264Encoder(
 
     fun startEncode() {
         isStop = false
-        h264Scope.launch { // 코루틴으로 비동기 작업 시작
+        h264Scope.launch {
             runEncodingProcess()
         }
     }
 
     fun stopEncode() {
         isStop = true
-        h264Scope.coroutineContext.job.cancelChildren() // 코루틴 작업 취소
+        h264Scope.coroutineContext.job.cancelChildren()
     }
 
 }
