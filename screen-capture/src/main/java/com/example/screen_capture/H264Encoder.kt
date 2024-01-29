@@ -5,6 +5,14 @@ import android.media.MediaCodecInfo
 import android.media.MediaFormat
 import android.media.MediaMuxer
 import android.view.Surface
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.NonCancellable.isActive
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.cancelChildren
+import kotlinx.coroutines.job
+import kotlinx.coroutines.launch
 import java.io.File
 import java.nio.ByteBuffer
 
@@ -14,7 +22,9 @@ internal class H264Encoder(
     private val height: Int,
     private val bindSurface: ((Surface) -> Unit)? = null,
     private val colorFormat: Int = MediaCodecInfo.CodecCapabilities.COLOR_FormatSurface
-) : Thread("H264-Encoding-Thread") {
+) {
+
+    private var h264Scope = CoroutineScope(Dispatchers.Default + SupervisorJob())
 
     private val mediaCodec: MediaCodec = MediaCodec.createEncoderByType(MediaFormat.MIMETYPE_VIDEO_AVC)
     private lateinit var mediaMuxer: MediaMuxer
@@ -39,19 +49,17 @@ internal class H264Encoder(
         bindSurface?.invoke(mediaCodec.createInputSurface())
     }
 
-    override fun run() {
-        super.run()
+    private fun runEncodingProcess() {
         mediaCodec.start()
         val info = MediaCodec.BufferInfo()
         prepareFile(filePath).let { mediaMuxer = MediaMuxer(it, MediaMuxer.OutputFormat.MUXER_OUTPUT_MPEG_4) }
 
         try {
-            while (!isStop) {
+            while (!isStop && h264Scope.coroutineContext.job.isActive) {
                 encodeVideo(info)
             }
         } catch (e: Exception) {
-            // Log and handle exception more specifically if needed
-            e.printStackTrace()
+            // 예외 처리
         } finally {
             tearDown()
         }
@@ -103,10 +111,14 @@ internal class H264Encoder(
 
     fun startEncode() {
         isStop = false
-        start()
+        h264Scope.launch { // 코루틴으로 비동기 작업 시작
+            runEncodingProcess()
+        }
     }
 
     fun stopEncode() {
         isStop = true
+        h264Scope.coroutineContext.job.cancelChildren() // 코루틴 작업 취소
     }
+
 }
