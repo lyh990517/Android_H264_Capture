@@ -24,7 +24,7 @@ internal class H264Encoder(
     private val colorFormat: Int = MediaCodecInfo.CodecCapabilities.COLOR_FormatSurface
 ) {
 
-    private var h264Scope = CoroutineScope(Dispatchers.Default + SupervisorJob())
+    private val h264Scope = CoroutineScope(Dispatchers.Default + SupervisorJob())
 
     private val mediaCodec: MediaCodec = MediaCodec.createEncoderByType(MediaFormat.MIMETYPE_VIDEO_AVC)
     private lateinit var mediaMuxer: MediaMuxer
